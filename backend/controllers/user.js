@@ -56,4 +56,29 @@ const login = async (req, res) => {
    }
 };
 
-module.exports = { register, login };
+const getMe = async (req, res) => {
+   try {
+      const user = await UserModel.findById(req.user.id);
+      res.status(200).json({
+         message: true,
+         user,
+      });
+   } catch (error) {
+      res.status(500).json({
+         success: false,
+         message: error.message,
+      });
+   }
+};
+
+const logout = async (req, res) => {
+   res.clearCookie("token", null, {
+      maxAge: new Date(Date.now()),
+      httpOnly: true,
+   });
+   res.status(200).json({
+      message: true,
+      message: "Logout User",
+   });
+};
+module.exports = { register, login, logout, getMe };
