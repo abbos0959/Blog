@@ -6,7 +6,7 @@ const UserModel = new mongoose.Schema(
 
       email: {
          type: String,
-         validate: [validator.isEmail, "Siz email kiriting"],
+         required: [true, "siz email kiritishni unutdingiz"],
          trim: true,
       },
       password: { type: String, required: true },

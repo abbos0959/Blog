@@ -7,7 +7,7 @@ const register = async (req, res) => {
 
       const user = await UserModel.findOne({ email });
       if (user) {
-         return res.status(402).json({
+         return res.status(200).json({
             success: false,
             message: "bunday user allaqachon mavjud",
          });
@@ -21,9 +21,9 @@ const register = async (req, res) => {
 
       jwtToken(newUser, 200, res);
    } catch (error) {
-      return res.status(500).json({
+      return res.status(200).json({
          success: false,
-         message: error.message,
+         message: error.errors.email.message,
       });
    }
 };
@@ -34,7 +34,7 @@ const login = async (req, res) => {
 
       const user = await UserModel.findOne({ email });
       if (!user) {
-         return res.status(402).json({
+         return res.status(200).json({
             success: false,
             message: "bunday user mavjud emas",
          });
@@ -42,14 +42,14 @@ const login = async (req, res) => {
 
       const comparePassword = await bcrypt.compare(password, user.password);
       if (!comparePassword) {
-         return res.status(402).json({
+         return res.status(200).json({
             success: false,
             message: "parolda xatolik mavjud iltimos tekshirib qaytadan tering",
          });
       }
       jwtToken(user, 200, res);
    } catch (error) {
-      res.status(500).json({
+      return res.status(200).json({
          success: false,
          message: error.message,
       });
@@ -60,11 +60,11 @@ const getMe = async (req, res) => {
    try {
       const user = await UserModel.findById(req.user.id);
       res.status(200).json({
-         message: true,
+         message: "sizning profilingiz",
          user,
       });
    } catch (error) {
-      res.status(500).json({
+      res.status(200).json({
          success: false,
          message: error.message,
       });
